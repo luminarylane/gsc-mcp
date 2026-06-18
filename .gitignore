@@ -1,0 +1,26 @@
+__pycache__/
+*.pyc
+.venv/
+service_account_credentials.json
+client_secrets.json
+token.json
+.env
+.env.local
+*.key
+.secrets
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Logs
+*.log
