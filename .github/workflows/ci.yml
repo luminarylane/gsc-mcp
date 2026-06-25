@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install ruff
+
+      - name: Lint with ruff
+        run: ruff check .
+
+  test:
+    needs: [check]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Check matrix status
+        run: |
+          if [ "${{ needs.check.result }}" != "success" ]; then
+            echo "Check matrix failed with result: ${{ needs.check.result }}"
+            exit 1
+          fi
+          echo "All checks passed!"
